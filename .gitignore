@@ -2,6 +2,10 @@
 /.dart_tool/
 /example/.dart_tool/
 /example/build/
+/example/ios/pods
+/example/ios/Flutter
+/example/ios/.symlinks
+
 .idea/
 # Miscellaneous
 *.class

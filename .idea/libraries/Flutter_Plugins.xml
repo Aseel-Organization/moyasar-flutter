@@ -1,6 +1,13 @@
 <component name="libraryTable">
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
-    <CLASSES />
+    <CLASSES>
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay-1.1.0" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay_ios-1.0.8" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay_android-1.0.9" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.2.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/webview_flutter_android-3.4.3" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/webview_flutter-4.0.6" />
+    </CLASSES>
     <JAVADOC />
     <SOURCES />
   </library>

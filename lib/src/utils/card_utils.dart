@@ -64,8 +64,12 @@ class CardUtils {
   }
 
   static List<String> getExpiryDate(String value) {
-    var split = value.split(RegExp(r'(/)'));
-    return [split[0].trim(), split[1].trim()];
+    try {
+      var split = value.split(RegExp(r'(/)'));
+      return [split[0].trim(), split[1].trim()];
+    } catch (e) {
+      return [];
+    }
   }
 
   static String getCleanedNumber(String text) {

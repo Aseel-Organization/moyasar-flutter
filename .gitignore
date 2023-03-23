@@ -56,3 +56,5 @@ app.*.map.json
 
 # Flutter Version Management CLI related
 .fvm/
+/pubspec.lock
+build/

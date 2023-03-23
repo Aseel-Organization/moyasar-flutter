@@ -15,4 +15,11 @@ class CardFormModel {
       this.month = '',
       this.year = '',
       this.cvc = ''});
+
+  bool oneOrMoreIsEmpty() =>
+      number.isEmpty ||
+      name.isEmpty ||
+      month.isEmpty ||
+      year.isEmpty ||
+      cvc.length < 3;
 }

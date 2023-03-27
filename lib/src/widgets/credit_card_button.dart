@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:moyasar/moyasar.dart';
 import 'package:moyasar/src/moyasar.dart';
 
-import 'package:moyasar/src/models/card_form_model.dart';
 import 'package:moyasar/src/models/payment_request.dart';
 import 'package:moyasar/src/models/sources/card/card_request_source.dart';
 
@@ -57,31 +56,33 @@ class _CreditCardButtonState extends State<CreditCardButton> {
       return;
     }
 
-    final String transactionUrl =
-        (result.source as CardPaymentResponseSource).transactionUrl;
+    if (result.source is CardPaymentResponseSource) {
+      final String transactionUrl =
+          (result.source as CardPaymentResponseSource).transactionUrl;
 
-    if (mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            fullscreenDialog: true,
-            maintainState: false,
-            builder: (context) => ThreeDSWebView(
-                transactionUrl: transactionUrl,
-                callbackUrl: widget.config.callbackUrl,
-                on3dsDone: (String status, String message) async {
-                  if (status == PaymentStatus.paid.name) {
-                    result.status = PaymentStatus.paid;
-                  } else {
-                    result.status = PaymentStatus.failed;
-                    (result.source as CardPaymentResponseSource).message =
-                        message;
-                  }
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              fullscreenDialog: true,
+              maintainState: false,
+              builder: (context) => ThreeDSWebView(
+                  transactionUrl: transactionUrl,
+                  callbackUrl: widget.config.callbackUrl,
+                  on3dsDone: (String status, String message) async {
+                    if (status == PaymentStatus.paid.name) {
+                      result.status = PaymentStatus.paid;
+                    } else {
+                      result.status = PaymentStatus.failed;
+                      (result.source as CardPaymentResponseSource).message =
+                          message;
+                    }
 
-                  Navigator.pop(context);
-                  widget.onPaymentResult(result);
-                })),
-      );
+                    Navigator.pop(context);
+                    widget.onPaymentResult(result);
+                  })),
+        );
+      }
     }
   }
 

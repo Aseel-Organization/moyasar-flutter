@@ -29,9 +29,9 @@ class _PaymentMethodsState extends State<PaymentMethods> {
           ),
         ),
         const Text("or"),
-        // CreditCard(
-        //     config: widget.paymentConfig,
-        //     onPaymentResult: widget.onPaymentResult),
+        CreditCard(
+            config: widget.paymentConfig,
+            onPaymentResult: widget.onPaymentResult),
         CustomCreditCard(
           checkValidation: _checkValidation,
           onCreditCardFormChange: (cardData, isValid) {

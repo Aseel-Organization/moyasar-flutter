@@ -4,6 +4,7 @@ import 'package:moyasar/moyasar.dart';
 import 'package:moyasar/src/models/card_form_model.dart';
 import 'package:moyasar/src/utils/card_utils.dart';
 import 'package:moyasar/src/utils/input_formatters.dart';
+import 'package:moyasar/src/widgets/card_form_field.dart';
 import 'package:moyasar/src/widgets/network_icons.dart';
 
 /// The widget that shows the Credit Card form and manages the 3DS step.
@@ -181,51 +182,6 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
   }
 }
 
-class CardFormField extends StatelessWidget {
-  final void Function(String?)? onSaved;
-  final String? Function(String?)? validator;
-  final TextInputType keyboardType;
-  final TextInputAction textInputAction;
-  final List<TextInputFormatter>? inputFormatters;
-  final InputDecoration? inputDecoration;
-
-  const CardFormField({
-    Key? key,
-    required this.onSaved,
-    this.validator,
-    this.inputDecoration,
-    this.keyboardType = TextInputType.number,
-    this.textInputAction = TextInputAction.next,
-    this.inputFormatters,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          decoration: inputDecoration,
-          validator: validator,
-          onChanged: (value) {
-            onSaved?.call(value);
-          },
-          inputFormatters: inputFormatters),
-    );
-  }
-}
-
-String showAmount(int amount, Localization locale) {
-  final formattedAmount = (amount / 100).toStringAsFixed(2);
-
-  if (locale.languageCode == 'en') {
-    return '${locale.pay} SAR $formattedAmount';
-  }
-
-  return '${locale.pay} $formattedAmount ر.س';
-}
-
 InputDecoration buildInputDecoration(
     {required String hintText, bool addNetworkIcons = false}) {
   return InputDecoration(
@@ -237,7 +193,6 @@ InputDecoration buildInputDecoration(
       errorBorder: defaultErrorBorder);
 }
 
-void closeKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
 
 BorderRadius defaultBorderRadius = const BorderRadius.all(Radius.circular(8));
 

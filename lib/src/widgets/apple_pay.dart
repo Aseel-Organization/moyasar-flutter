@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moyasar/src/utils/apple_pay_utils.dart';
-
 import 'package:pay/pay.dart';
-
 import 'package:moyasar/moyasar.dart';
 import 'package:moyasar/src/moyasar.dart';
 import 'package:moyasar/src/models/payment_request.dart';
@@ -26,26 +24,28 @@ class ApplePay extends StatefulWidget {
 }
 
 class _ApplePayState extends State<ApplePay> {
+  late Future<PaymentConfiguration> _paymentConfigurationFuture;
   String _merchantName = "";
 
   @override
   initState() {
     super.initState();
-    setMerchantName();
+    _paymentConfigurationFuture = _getPaymentConfigurationFromAsset();
+    _setMerchantName();
   }
 
-  void setMerchantName() async {
+  void _setMerchantName() async {
     String merchantName = await ApplePayUtils.getMerchantName();
     setState(() {
       _merchantName = merchantName;
     });
   }
 
-  void onApplePayError(error) {
+  void _onApplePayError(error) {
     widget.onPaymentResult(PaymentCanceledError());
   }
 
-  void onApplePayResult(paymentResult) async {
+  void _onApplePayResult(paymentResult) async {
     final token = paymentResult['token'];
     final source = ApplePayPaymentRequestSource(token);
     final paymentRequest = PaymentRequest(widget.config, source);
@@ -59,23 +59,36 @@ class _ApplePayState extends State<ApplePay> {
 
   @override
   Widget build(BuildContext context) {
-    return ApplePayButton(
-      paymentConfigurationAsset: 'default_payment_profile_apple_pay.json',
-      paymentItems: [
-        PaymentItem(
-          label: _merchantName,
-          amount: (widget.config.amount / 100).toStringAsFixed(2),
-        )
-      ],
-      type: ApplePayButtonType.inStore,
-      onPaymentResult: onApplePayResult,
-      onPressed: widget.onPressed,
-      width: MediaQuery.of(context).size.width,
-      height: 40,
-      onError: onApplePayError,
-      loadingIndicator: const Center(
-        child: CircularProgressIndicator(),
-      ),
+    return FutureBuilder<PaymentConfiguration>(
+        future: _paymentConfigurationFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ApplePayButton(
+              paymentConfiguration: snapshot.data,
+              paymentItems: [
+                PaymentItem(
+                  label: _merchantName,
+                  amount: (widget.config.amount / 100).toStringAsFixed(2),
+                ),
+              ],
+              type: ApplePayButtonType.inStore,
+              onPaymentResult: _onApplePayResult,
+              onPressed: widget.onPressed,
+              width: MediaQuery.of(context).size.width,
+              height: 40,
+              onError: _onApplePayError,
+              loadingIndicator: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        });
+  }
+
+  Future<PaymentConfiguration> _getPaymentConfigurationFromAsset() {
+    return PaymentConfiguration.fromAsset(
+      'default_payment_profile_apple_pay.json',
     );
   }
 }

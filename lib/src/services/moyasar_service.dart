@@ -12,18 +12,16 @@ class MoyasarService {
   })  : _cardData = cardData,
         _config = config;
 
-  Future<PaymentResponse?> pay() async {
-    final source = CardPaymentRequestSource(_cardData);
-    final paymentRequest = PaymentRequest(_config, source);
+  Future<PaymentResponse> pay() async {
+    try {
+      final source = CardPaymentRequestSource(_cardData);
+      final paymentRequest = PaymentRequest(_config, source);
+      final result = await Moyasar.pay(
+          apiKey: _config.publishableApiKey, paymentRequest: paymentRequest);
 
-    final result = await Moyasar.pay(
-        apiKey: _config.publishableApiKey, paymentRequest: paymentRequest);
-
-    if (result is! PaymentResponse ||
-        result.status != PaymentStatus.initiated) {
-      return null;
+      return result;
+    } catch (e) {
+      rethrow;
     }
-
-    return result;
   }
 }

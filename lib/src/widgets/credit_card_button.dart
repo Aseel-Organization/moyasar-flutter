@@ -6,8 +6,6 @@ import 'package:moyasar/src/moyasar.dart';
 import 'package:moyasar/src/models/payment_request.dart';
 import 'package:moyasar/src/models/sources/card/card_request_source.dart';
 
-import 'package:moyasar/src/widgets/three_d_s_webview.dart';
-
 /// The widget that shows the Credit Card form and manages the 3DS step.
 class CreditCardButton extends StatefulWidget {
   const CreditCardButton(
@@ -37,7 +35,7 @@ class CreditCardButton extends StatefulWidget {
 class _CreditCardButtonState extends State<CreditCardButton> {
   bool _isSubmitting = false;
 
-  void _saveForm() async {
+  void _pay() async {
     final source = CardPaymentRequestSource(widget.cardData);
     final paymentRequest = PaymentRequest(widget.config, source);
 
@@ -89,7 +87,7 @@ class _CreditCardButtonState extends State<CreditCardButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: _isSubmitting ? () {} : _saveForm,
+      onPressed: _isSubmitting ? () {} : _pay,
       style: widget.buttonStyle,
       child: Row(
         children: [

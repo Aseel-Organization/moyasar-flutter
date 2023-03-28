@@ -14,9 +14,9 @@ class PaymentMethods extends StatefulWidget {
 
 class _PaymentMethodsState extends State<PaymentMethods> {
   CardFormModel? _cardData;
-
   bool _checkValidation = false;
   bool _isValid = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,28 +30,15 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         ),
         const Text("or"),
         CreditCard(
-            config: widget.paymentConfig,
-            onPaymentResult: widget.onPaymentResult),
+          config: widget.paymentConfig,
+          onPaymentResult: widget.onPaymentResult,
+        ),
         CustomCreditCard(
           checkValidation: _checkValidation,
-          onCreditCardFormChange: (cardData, isValid) {
-            if (isValid) {
-              setState(() {
-                _cardData = cardData;
-              });
-            }
-            setState(() {
-              _isValid = isValid;
-            });
-          },
+          onCreditCardFormChange: _onCreditCardFormChange,
         ),
         ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _checkValidation = true;
-            });
-            debugPrint('${_cardData != null}');
-          },
+          onPressed: _setCheckValidation,
           child: const Text('book'),
         ),
         if (_isValid && _cardData != null)
@@ -62,5 +49,22 @@ class _PaymentMethodsState extends State<PaymentMethods> {
           ),
       ],
     );
+  }
+
+  void _setCheckValidation() {
+    setState(() {
+      _checkValidation = true;
+    });
+  }
+
+  void _onCreditCardFormChange(CardFormModel cardData, bool isValid) {
+    if (isValid) {
+      setState(() {
+        _cardData = cardData;
+      });
+    }
+    setState(() {
+      _isValid = isValid;
+    });
   }
 }

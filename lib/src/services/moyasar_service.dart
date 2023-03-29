@@ -1,27 +1,38 @@
 import 'package:moyasar/moyasar.dart';
 import 'package:moyasar/src/models/payment_request.dart';
+import 'package:moyasar/src/models/sources/apple_pay/apple_pay_request_source.dart';
 import 'package:moyasar/src/models/sources/card/card_request_source.dart';
 import 'package:moyasar/src/moyasar.dart';
 
 class MoyasarService {
-  final CardFormModel _cardData;
-  final PaymentConfig _config;
-  MoyasarService({
-    required CardFormModel cardData,
+  static Future<PaymentResponse> pay({
     required PaymentConfig config,
-  })  : _cardData = cardData,
-        _config = config;
-
-  Future<PaymentResponse> pay() async {
+    required CardFormModel cardData,
+  }) async {
     try {
-      final source = CardPaymentRequestSource(_cardData);
-      final paymentRequest = PaymentRequest(_config, source);
+      final source = CardPaymentRequestSource(cardData);
+      final paymentRequest = PaymentRequest(config, source);
       final result = await Moyasar.pay(
-          apiKey: _config.publishableApiKey, paymentRequest: paymentRequest);
-
+          apiKey: config.publishableApiKey, paymentRequest: paymentRequest);
       return result;
     } catch (e) {
       rethrow;
     }
   }
+
+  static Future<PaymentStatus> applePay({
+    required PaymentConfig config,
+    required String token,
+  }) async {
+    final source = ApplePayPaymentRequestSource(token);
+    final paymentRequest = PaymentRequest(config, source);
+    final result = await Moyasar.pay(
+        apiKey: config.publishableApiKey, paymentRequest: paymentRequest);
+    if (result is PaymentResponse) {
+      return result.status;
+    }
+    return PaymentStatus.failed;
+  }
+
+  MoyasarService._();
 }

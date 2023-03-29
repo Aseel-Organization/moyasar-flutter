@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:moyasar/src/utils/apple_pay_utils.dart';
 import 'package:pay/pay.dart';
-import 'package:moyasar/moyasar.dart';
-import 'package:moyasar/src/moyasar.dart';
-import 'package:moyasar/src/models/payment_request.dart';
-import 'package:moyasar/src/models/sources/apple_pay/apple_pay_request_source.dart';
 
 /// The widget that shows the Apple Pay button.
 class ApplePay extends StatefulWidget {
   const ApplePay({
     super.key,
-    required this.config,
+    required this.amount,
     required this.onPaymentResult,
     this.onPressed,
   });
 
-  final PaymentConfig config;
+  final int amount;
   final Function onPaymentResult;
   final VoidCallback? onPressed;
 
@@ -42,19 +38,16 @@ class _ApplePayState extends State<ApplePay> {
   }
 
   void _onApplePayError(error) {
-    widget.onPaymentResult(PaymentCanceledError());
+    widget.onPaymentResult(error);
   }
 
   void _onApplePayResult(paymentResult) async {
-    final token = paymentResult['token'];
-    final source = ApplePayPaymentRequestSource(token);
-    final paymentRequest = PaymentRequest(widget.config, source);
-
-    final result = await Moyasar.pay(
-        apiKey: widget.config.publishableApiKey,
-        paymentRequest: paymentRequest);
-
-    widget.onPaymentResult(result);
+    try {
+      final token = paymentResult['token'];
+      widget.onPaymentResult(token);
+    } catch (e) {
+      _onApplePayError(e);
+    }
   }
 
   @override
@@ -68,7 +61,7 @@ class _ApplePayState extends State<ApplePay> {
               paymentItems: [
                 PaymentItem(
                   label: _merchantName,
-                  amount: (widget.config.amount / 100).toStringAsFixed(2),
+                  amount: (widget.amount / 100).toStringAsFixed(2),
                 ),
               ],
               type: ApplePayButtonType.inStore,

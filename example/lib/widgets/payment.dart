@@ -24,8 +24,8 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: ApplePay(
-            config: widget.paymentConfig,
             onPaymentResult: widget.onPaymentResult,
+            amount: 10,
           ),
         ),
         const Text("or"),

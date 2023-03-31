@@ -38,14 +38,18 @@ class _CreditCardButtonState extends State<CreditCardButton> {
 
   void _pay() async {
     final source = CardPaymentRequestSource(widget.cardData);
-    final paymentRequest = PaymentRequest(widget.config, source);
+    final paymentRequest = PaymentRequest(
+      widget.config,
+      source,
+    );
 
     setState(() => _isSubmitting = true);
     widget.onPressed?.call(_isSubmitting);
 
     final result = await Moyasar.pay(
-        apiKey: widget.config.publishableApiKey,
-        paymentRequest: paymentRequest);
+      apiKey: widget.config.publishableApiKey,
+      paymentRequest: paymentRequest,
+    );
 
     setState(() => _isSubmitting = false);
     widget.onPressed?.call(_isSubmitting);

@@ -11,9 +11,14 @@ class MoyasarService {
   }) async {
     try {
       final source = CardPaymentRequestSource(cardData);
-      final paymentRequest = PaymentRequest(config, source);
+      final paymentRequest = PaymentRequest(
+        config,
+        source,
+      );
       final result = await Moyasar.pay(
-          apiKey: config.publishableApiKey, paymentRequest: paymentRequest);
+        apiKey: config.publishableApiKey,
+        paymentRequest: paymentRequest,
+      );
       return result;
     } catch (e) {
       rethrow;
@@ -25,9 +30,14 @@ class MoyasarService {
     required String token,
   }) async {
     final source = ApplePayPaymentRequestSource(token);
-    final paymentRequest = PaymentRequest(config, source);
+    final paymentRequest = PaymentRequest(
+      config,
+      source,
+    );
     final result = await Moyasar.pay(
-        apiKey: config.publishableApiKey, paymentRequest: paymentRequest);
+      apiKey: config.publishableApiKey,
+      paymentRequest: paymentRequest,
+    );
     if (result is PaymentResponse) {
       return result.status;
     }

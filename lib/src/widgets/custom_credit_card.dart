@@ -161,7 +161,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
     );
   }
 
-  void _onCvcChange(value) {
+  void _onCvcChange(String? value) {
     _cardData.cvc = value ?? '';
     widget.onCreditCardFormChange(
       _cardData,
@@ -169,9 +169,9 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
     );
   }
 
-  void _onExpiryDateChange(value) {
+  void _onExpiryDateChange(String? value) {
     if (value != null) {
-      List<String> expireDate = CardUtils.getExpiryDate(value!);
+      List<String> expireDate = CardUtils.getExpiryDate(value);
       if (expireDate.length == 2) {
         _cardData.month = expireDate.first;
         _cardData.year = expireDate[1];
@@ -183,7 +183,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
     }
   }
 
-  void _onCardNumberChange(value) {
+  void _onCardNumberChange(String? value) {
     if (value != null) {
       _cardData.number = CardUtils.getCleanedNumber(value);
       widget.onCreditCardFormChange(
@@ -193,7 +193,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
     }
   }
 
-  void _onNameOnCardChange(value) {
+  void _onNameOnCardChange(String? value) {
     _cardData.name = value ?? '';
     widget.onCreditCardFormChange(
       _cardData,

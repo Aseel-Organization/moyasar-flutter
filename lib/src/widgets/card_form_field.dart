@@ -28,9 +28,7 @@ class CardFormField extends StatelessWidget {
         textInputAction: textInputAction,
         decoration: inputDecoration,
         validator: validator,
-        onChanged: (value) {
-          onChanged?.call(value);
-        },
+        onChanged: onChanged,
         inputFormatters: inputFormatters,
       ),
     );

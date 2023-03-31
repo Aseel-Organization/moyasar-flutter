@@ -178,15 +178,17 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
   }
 
   void _onExpiryDateChange(value) {
-    List<String> expireDate = CardUtils.getExpiryDate(value!);
-    if (expireDate.length == 2) {
-      _cardData.month = expireDate.first;
-      _cardData.year = expireDate[1];
+    if (value != null) {
+      List<String> expireDate = CardUtils.getExpiryDate(value!);
+      if (expireDate.length == 2) {
+        _cardData.month = expireDate.first;
+        _cardData.year = expireDate[1];
+      }
+      widget.onCreditCardFormChange(
+        _cardData,
+        _isValidForm(),
+      );
     }
-    widget.onCreditCardFormChange(
-      _cardData,
-      _isValidForm(),
-    );
   }
 
   void _onCardNumberChange(value) {

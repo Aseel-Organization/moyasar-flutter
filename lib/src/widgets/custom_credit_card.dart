@@ -73,13 +73,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                     input,
                     widget.locale,
                   ),
-              onChanged: (value) {
-                _cardData.name = value ?? '';
-                widget.onCreditCardFormChange(
-                  _cardData,
-                  _isValidForm(),
-                );
-              },
+              onChanged: _onNameOnCardChange,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[a-zA-Z. ]')),
               ]),
@@ -97,15 +91,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 LengthLimitingTextInputFormatter(16),
                 CardNumberInputFormatter(),
               ],
-              onChanged: (value) {
-                if (value != null) {
-                  _cardData.number = CardUtils.getCleanedNumber(value);
-                  widget.onCreditCardFormChange(
-                    _cardData,
-                    _isValidForm(),
-                  );
-                }
-              }),
+              onChanged: _onCardNumberChange),
           if (widget.horizontalExpiryAndCvv)
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,17 +110,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                       input,
                       widget.locale,
                     ),
-                    onChanged: (value) {
-                      List<String> expireDate = CardUtils.getExpiryDate(value!);
-                      if (expireDate.length == 2) {
-                        _cardData.month = expireDate.first;
-                        _cardData.year = expireDate[1];
-                      }
-                      widget.onCreditCardFormChange(
-                        _cardData,
-                        _isValidForm(),
-                      );
-                    },
+                    onChanged: _onExpiryDateChange,
                   ),
                 ),
                 const SizedBox(
@@ -142,24 +118,19 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 ),
                 Expanded(
                   child: CardFormField(
-                      inputDecoration: buildInputDecoration(
-                        hintText: widget.locale.cvc,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(4),
-                      ],
-                      validator: (String? input) => CardUtils.validateCVC(
-                            input,
-                            widget.locale,
-                          ),
-                      onChanged: (value) {
-                        _cardData.cvc = value ?? '';
-                        widget.onCreditCardFormChange(
-                          _cardData,
-                          _isValidForm(),
-                        );
-                      }),
+                    inputDecoration: buildInputDecoration(
+                      hintText: widget.locale.cvc,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(4),
+                    ],
+                    validator: (String? input) => CardUtils.validateCVC(
+                      input,
+                      widget.locale,
+                    ),
+                    onChanged: _onCvcChange,
+                  ),
                 ),
               ],
             )
@@ -177,17 +148,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 input,
                 widget.locale,
               ),
-              onChanged: (value) {
-                List<String> expireDate = CardUtils.getExpiryDate(value!);
-                if (expireDate.length == 2) {
-                  _cardData.month = expireDate.first;
-                  _cardData.year = expireDate[1];
-                }
-                widget.onCreditCardFormChange(
-                  _cardData,
-                  _isValidForm(),
-                );
-              },
+              onChanged: _onExpiryDateChange,
             ),
             CardFormField(
                 inputDecoration: buildInputDecoration(
@@ -201,16 +162,48 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                       input,
                       widget.locale,
                     ),
-                onChanged: (value) {
-                  _cardData.cvc = value ?? '';
-                  widget.onCreditCardFormChange(
-                    _cardData,
-                    _isValidForm(),
-                  );
-                }),
+                onChanged: _onCvcChange),
           ],
         ],
       ),
+    );
+  }
+
+  void _onCvcChange(value) {
+    _cardData.cvc = value ?? '';
+    widget.onCreditCardFormChange(
+      _cardData,
+      _isValidForm(),
+    );
+  }
+
+  void _onExpiryDateChange(value) {
+    List<String> expireDate = CardUtils.getExpiryDate(value!);
+    if (expireDate.length == 2) {
+      _cardData.month = expireDate.first;
+      _cardData.year = expireDate[1];
+    }
+    widget.onCreditCardFormChange(
+      _cardData,
+      _isValidForm(),
+    );
+  }
+
+  void _onCardNumberChange(value) {
+    if (value != null) {
+      _cardData.number = CardUtils.getCleanedNumber(value);
+      widget.onCreditCardFormChange(
+        _cardData,
+        _isValidForm(),
+      );
+    }
+  }
+
+  void _onNameOnCardChange(value) {
+    _cardData.name = value ?? '';
+    widget.onCreditCardFormChange(
+      _cardData,
+      _isValidForm(),
     );
   }
 }

@@ -92,7 +92,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
 
   Widget _buildCardNameFormField() {
     return CardFormField(
-      inputDecoration: buildInputDecoration(
+      inputDecoration: _buildInputDecoration(
         hintText: widget.locale.nameOnCard,
       ),
       keyboardType: TextInputType.text,
@@ -109,7 +109,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
 
   Widget _buildCardNumberFormField() {
     return CardFormField(
-        inputDecoration: buildInputDecoration(
+        inputDecoration: _buildInputDecoration(
           hintText: widget.locale.cardNumber,
           addNetworkIcons: true,
         ),
@@ -127,7 +127,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
 
   Widget _buildCvcFormField() {
     return CardFormField(
-      inputDecoration: buildInputDecoration(
+      inputDecoration: _buildInputDecoration(
         hintText: widget.locale.cvc,
       ),
       inputFormatters: [
@@ -144,7 +144,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
 
   Widget _buildExpiryFormField() {
     return CardFormField(
-      inputDecoration: buildInputDecoration(
+      inputDecoration: _buildInputDecoration(
         hintText: '${widget.locale.expiry} (MM / YY)',
       ),
       inputFormatters: [
@@ -200,37 +200,35 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
     );
   }
 
-  InputDecoration buildInputDecoration({
+  InputDecoration _buildInputDecoration({
     required String hintText,
     bool addNetworkIcons = false,
   }) {
     return InputDecoration(
       suffixIcon: addNetworkIcons ? const NetworkIcons() : null,
       hintText: hintText,
-      focusedErrorBorder: defaultErrorBorder,
-      enabledBorder: defaultEnabledBorder,
-      focusedBorder: defaultFocusedBorder,
-      errorBorder: defaultErrorBorder,
+      focusedErrorBorder: _defaultErrorBorder,
+      enabledBorder: _defaultEnabledBorder,
+      focusedBorder: _defaultFocusedBorder,
+      errorBorder: _defaultErrorBorder,
     );
   }
 
-  BorderRadius defaultBorderRadius = const BorderRadius.all(Radius.circular(8));
-
-  OutlineInputBorder defaultEnabledBorder = OutlineInputBorder(
+  final OutlineInputBorder _defaultEnabledBorder = OutlineInputBorder(
     borderSide: BorderSide(color: Colors.grey[400]!),
     borderRadius: const BorderRadius.all(
       Radius.circular(8),
     ),
   );
 
-  OutlineInputBorder defaultFocusedBorder = OutlineInputBorder(
+  final OutlineInputBorder _defaultFocusedBorder = OutlineInputBorder(
     borderSide: BorderSide(color: Colors.grey[600]!),
     borderRadius: const BorderRadius.all(
       Radius.circular(8),
     ),
   );
 
-  OutlineInputBorder defaultErrorBorder = const OutlineInputBorder(
+  final OutlineInputBorder _defaultErrorBorder = const OutlineInputBorder(
     borderSide: BorderSide(color: Colors.red),
     borderRadius: BorderRadius.all(
       Radius.circular(8),

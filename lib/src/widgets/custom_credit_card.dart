@@ -27,7 +27,7 @@ class CustomCreditCard extends StatefulWidget {
 }
 
 class _CustomCreditCardState extends State<CustomCreditCard> {
-  final _cardData = CardFormModel();
+  final CardFormModel _cardData = CardFormModel();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;

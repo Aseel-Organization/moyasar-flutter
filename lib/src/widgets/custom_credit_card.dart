@@ -109,20 +109,21 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
 
   Widget _buildCardNumberFormField() {
     return CardFormField(
-        inputDecoration: _buildInputDecoration(
-          hintText: widget.locale.cardNumber,
-          addNetworkIcons: true,
-        ),
-        validator: (String? input) => CardUtils.validateCardNum(
-              input,
-              widget.locale,
-            ),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(16),
-          CardNumberInputFormatter(),
-        ],
-        onChanged: _onCardNumberChange);
+      inputDecoration: _buildInputDecoration(
+        hintText: widget.locale.cardNumber,
+        addNetworkIcons: true,
+      ),
+      validator: (String? input) => CardUtils.validateCardNum(
+        input,
+        widget.locale,
+      ),
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(16),
+        CardNumberInputFormatter(),
+      ],
+      onChanged: _onCardNumberChange,
+    );
   }
 
   Widget _buildCvcFormField() {

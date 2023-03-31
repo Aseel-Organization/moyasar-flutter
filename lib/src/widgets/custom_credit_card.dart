@@ -64,108 +64,99 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
       key: _formKey,
       child: Column(
         children: [
-          CardFormField(
-              inputDecoration: buildInputDecoration(
-                hintText: widget.locale.nameOnCard,
-              ),
-              keyboardType: TextInputType.text,
-              validator: (String? input) => CardUtils.validateName(
-                    input,
-                    widget.locale,
-                  ),
-              onChanged: _onNameOnCardChange,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z. ]')),
-              ]),
-          CardFormField(
-              inputDecoration: buildInputDecoration(
-                hintText: widget.locale.cardNumber,
-                addNetworkIcons: true,
-              ),
-              validator: (String? input) => CardUtils.validateCardNum(
-                    input,
-                    widget.locale,
-                  ),
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(16),
-                CardNumberInputFormatter(),
-              ],
-              onChanged: _onCardNumberChange),
+          _buildCardNameFormField(),
+          _buildCardNumberFormField(),
           if (widget.horizontalExpiryAndCvv)
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: CardFormField(
-                    inputDecoration: buildInputDecoration(
-                      hintText: '${widget.locale.expiry} (MM / YY)',
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(4),
-                      CardMonthInputFormatter(),
-                    ],
-                    validator: (String? input) => CardUtils.validateDate(
-                      input,
-                      widget.locale,
-                    ),
-                    onChanged: _onExpiryDateChange,
-                  ),
+                  child: _buildExpiryFormField(),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Expanded(
-                  child: CardFormField(
-                    inputDecoration: buildInputDecoration(
-                      hintText: widget.locale.cvc,
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(4),
-                    ],
-                    validator: (String? input) => CardUtils.validateCVC(
-                      input,
-                      widget.locale,
-                    ),
-                    onChanged: _onCvcChange,
-                  ),
+                  child: _buildCvcFormField(),
                 ),
               ],
             )
           else ...[
-            CardFormField(
-              inputDecoration: buildInputDecoration(
-                hintText: '${widget.locale.expiry} (MM / YY)',
-              ),
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(4),
-                CardMonthInputFormatter(),
-              ],
-              validator: (String? input) => CardUtils.validateDate(
-                input,
-                widget.locale,
-              ),
-              onChanged: _onExpiryDateChange,
-            ),
-            CardFormField(
-                inputDecoration: buildInputDecoration(
-                  hintText: widget.locale.cvc,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4),
-                ],
-                validator: (String? input) => CardUtils.validateCVC(
-                      input,
-                      widget.locale,
-                    ),
-                onChanged: _onCvcChange),
+            _buildExpiryFormField(),
+            _buildCvcFormField(),
           ],
         ],
       ),
+    );
+  }
+
+  Widget _buildCardNameFormField() {
+    return CardFormField(
+      inputDecoration: buildInputDecoration(
+        hintText: widget.locale.nameOnCard,
+      ),
+      keyboardType: TextInputType.text,
+      validator: (String? input) => CardUtils.validateName(
+        input,
+        widget.locale,
+      ),
+      onChanged: _onNameOnCardChange,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z. ]')),
+      ],
+    );
+  }
+
+  Widget _buildCardNumberFormField() {
+    return CardFormField(
+        inputDecoration: buildInputDecoration(
+          hintText: widget.locale.cardNumber,
+          addNetworkIcons: true,
+        ),
+        validator: (String? input) => CardUtils.validateCardNum(
+              input,
+              widget.locale,
+            ),
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(16),
+          CardNumberInputFormatter(),
+        ],
+        onChanged: _onCardNumberChange);
+  }
+
+  Widget _buildCvcFormField() {
+    return CardFormField(
+      inputDecoration: buildInputDecoration(
+        hintText: widget.locale.cvc,
+      ),
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(4),
+      ],
+      validator: (String? input) => CardUtils.validateCVC(
+        input,
+        widget.locale,
+      ),
+      onChanged: _onCvcChange,
+    );
+  }
+
+  Widget _buildExpiryFormField() {
+    return CardFormField(
+      inputDecoration: buildInputDecoration(
+        hintText: '${widget.locale.expiry} (MM / YY)',
+      ),
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(4),
+        CardMonthInputFormatter(),
+      ],
+      validator: (String? input) => CardUtils.validateDate(
+        input,
+        widget.locale,
+      ),
+      onChanged: _onExpiryDateChange,
     );
   }
 

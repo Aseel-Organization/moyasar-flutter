@@ -30,7 +30,7 @@ class _ApplePayState extends State<ApplePay> {
     _setMerchantName();
   }
 
-  void _setMerchantName() async {
+  Future<void> _setMerchantName() async {
     String merchantName = await ApplePayUtils.getMerchantName();
     setState(() {
       _merchantName = merchantName;
@@ -41,7 +41,7 @@ class _ApplePayState extends State<ApplePay> {
     widget.onPaymentResult(error);
   }
 
-  void _onApplePayResult(paymentResult) async {
+  Future<void> _onApplePayResult(paymentResult) async {
     try {
       final token = paymentResult['token'];
       widget.onPaymentResult(token);

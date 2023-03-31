@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:moyasar/src/widgets/network_icons.dart';
 
 class CreditFormTheme {
-  static InputDecoration buildInputDecoration(
-      {required String hintText, bool addNetworkIcons = false}) {
+  static InputDecoration buildInputDecoration({
+    required String hintText,
+    bool addNetworkIcons = false,
+  }) {
     return InputDecoration(
       suffixIcon: addNetworkIcons ? const NetworkIcons() : null,
       hintText: hintText,

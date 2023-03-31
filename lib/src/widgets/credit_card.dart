@@ -78,7 +78,10 @@ class _CreditCardState extends State<CreditCard> {
             builder: (context) => ThreeDSWebView(
                 transactionUrl: transactionUrl,
                 callbackUrl: widget.config.callbackUrl,
-                on3dsDone: (String status, String message) async {
+                on3dsDone: (
+                  String status,
+                  String message,
+                ) async {
                   if (status == PaymentStatus.paid.name) {
                     result.status = PaymentStatus.paid;
                   } else {

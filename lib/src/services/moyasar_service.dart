@@ -36,15 +36,16 @@ class MoyasarService {
       config,
       source,
     );
-    final result = await Moyasar.pay(
-      apiKey: config.publishableApiKey,
-      paymentRequest: paymentRequest,
-    );
-    if (result is PaymentResponse) {
+    try {
+      final PaymentResponse result = await Moyasar.pay(
+        apiKey: config.publishableApiKey,
+        paymentRequest: paymentRequest,
+      );
       return result.status;
+    } catch (e) {
+      return PaymentStatus.failed;
     }
-    return PaymentStatus.failed;
   }
 
-  MoyasarService._();
+  const MoyasarService._();
 }

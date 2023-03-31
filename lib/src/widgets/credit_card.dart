@@ -170,7 +170,7 @@ class _CreditCardState extends State<CreditCard> {
                         color: Colors.white,
                         strokeWidth: 2,
                       )
-                    : Text(_showAmount(widget.config.amount, widget.locale)),
+                    : Text(_getShowAmount(widget.config.amount, widget.locale)),
               ),
             ),
           ),
@@ -179,7 +179,7 @@ class _CreditCardState extends State<CreditCard> {
     );
   }
 
-  String _showAmount(int amount, Localization locale) {
+  String _getShowAmount(int amount, Localization locale) {
     final formattedAmount = (amount / 100).toStringAsFixed(2);
 
     if (locale.languageCode == 'en') {

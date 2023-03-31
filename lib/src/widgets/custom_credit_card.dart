@@ -8,12 +8,13 @@ import 'package:moyasar/src/widgets/network_icons.dart';
 
 /// The widget that shows the Credit Card form and manages the 3DS step.
 class CustomCreditCard extends StatefulWidget {
-  const CustomCreditCard(
-      {super.key,
-      this.checkValidation = false,
-      required this.onCreditCardFormChange,
-      this.horizontalExpiryAndCvv = false,
-      this.locale = const Localization.en()});
+  const CustomCreditCard({
+    super.key,
+    this.checkValidation = false,
+    required this.onCreditCardFormChange,
+    this.horizontalExpiryAndCvv = false,
+    this.locale = const Localization.en(),
+  });
 
   final void Function(CardFormModel cardData, bool isValid)
       onCreditCardFormChange;

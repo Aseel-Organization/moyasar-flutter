@@ -49,40 +49,53 @@ class _CreditCardButtonState extends State<CreditCardButton> {
 
     setState(() => _isSubmitting = false);
     widget.onPressed?.call(_isSubmitting);
+    _handlePaymentResponse(result);
+  }
+
+  void _handlePaymentResponse(result) {
     if (result is! PaymentResponse ||
         result.status != PaymentStatus.initiated) {
       widget.onPaymentResult(result);
       return;
     }
-
     if (result.source is CardPaymentResponseSource) {
       final String transactionUrl =
           (result.source as CardPaymentResponseSource).transactionUrl;
-
       if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              fullscreenDialog: true,
-              maintainState: false,
-              builder: (context) => ThreeDSWebView(
-                  transactionUrl: transactionUrl,
-                  callbackUrl: widget.config.callbackUrl,
-                  on3dsDone: (String status, String message) async {
-                    if (status == PaymentStatus.paid.name) {
-                      result.status = PaymentStatus.paid;
-                    } else {
-                      result.status = PaymentStatus.failed;
-                      (result.source as CardPaymentResponseSource).message =
-                          message;
-                    }
-
-                    Navigator.pop(context);
-                    widget.onPaymentResult(result);
-                  })),
+        _openThreeDSecure(
+          result,
+          transactionUrl,
         );
       }
     }
+  }
+
+  void _openThreeDSecure(
+    PaymentResponse result,
+    String transactionUrl,
+  ) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        maintainState: false,
+        builder: (context) => ThreeDSWebView(
+          transactionUrl: transactionUrl,
+          callbackUrl: widget.config.callbackUrl,
+          on3dsDone: (String status, String message) {
+            if (status == PaymentStatus.paid.name) {
+              result.status = PaymentStatus.paid;
+            } else {
+              result.status = PaymentStatus.failed;
+              (result.source as CardPaymentResponseSource).message = message;
+            }
+
+            Navigator.pop(context);
+            widget.onPaymentResult(result);
+          },
+        ),
+      ),
+    );
   }
 
   @override

@@ -30,8 +30,9 @@ class MoyasarService {
     required PaymentConfig config,
     required String token,
   }) async {
-    final source = ApplePayPaymentRequestSource(token);
-    final paymentRequest = PaymentRequest(
+    final ApplePayPaymentRequestSource source =
+        ApplePayPaymentRequestSource(token);
+    final PaymentRequest paymentRequest = PaymentRequest(
       config,
       source,
     );

@@ -24,14 +24,15 @@ class CardFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          decoration: inputDecoration,
-          validator: validator,
-          onChanged: (value) {
-            onChanged?.call(value);
-          },
-          inputFormatters: inputFormatters),
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        decoration: inputDecoration,
+        validator: validator,
+        onChanged: (value) {
+          onChanged?.call(value);
+        },
+        inputFormatters: inputFormatters,
+      ),
     );
   }
 }

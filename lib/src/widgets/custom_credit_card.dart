@@ -98,11 +98,13 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 CardNumberInputFormatter(),
               ],
               onChanged: (value) {
-                _cardData.number = CardUtils.getCleanedNumber(value!);
-                widget.onCreditCardFormChange(
-                  _cardData,
-                  _isValidForm(),
-                );
+                if (value != null) {
+                  _cardData.number = CardUtils.getCleanedNumber(value);
+                  widget.onCreditCardFormChange(
+                    _cardData,
+                    _isValidForm(),
+                  );
+                }
               }),
           if (widget.horizontalExpiryAndCvv)
             Row(

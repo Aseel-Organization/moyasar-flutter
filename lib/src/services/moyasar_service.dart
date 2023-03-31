@@ -10,12 +10,13 @@ class MoyasarService {
     required CardFormModel cardData,
   }) async {
     try {
-      final source = CardPaymentRequestSource(cardData);
-      final paymentRequest = PaymentRequest(
+      final CardPaymentRequestSource source =
+          CardPaymentRequestSource(cardData);
+      final PaymentRequest paymentRequest = PaymentRequest(
         config,
         source,
       );
-      final result = await Moyasar.pay(
+      final PaymentResponse result = await Moyasar.pay(
         apiKey: config.publishableApiKey,
         paymentRequest: paymentRequest,
       );

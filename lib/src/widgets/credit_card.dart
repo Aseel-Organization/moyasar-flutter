@@ -217,17 +217,17 @@ class _CreditCardState extends State<CreditCard> {
     );
   }
 
-  void _onChangeCvc(value) => _cardData.cvc = value ?? '';
+  void _onChangeCvc(String? value) => _cardData.cvc = value ?? '';
 
-  void _onChangeName(value) => _cardData.name = value ?? '';
+  void _onChangeName(String? value) => _cardData.name = value ?? '';
 
-  void _onChangeCardNumber(value) {
+  void _onChangeCardNumber(String? value) {
     if (value != null) {
       _cardData.number = CardUtils.getCleanedNumber(value);
     }
   }
 
-  void _onChangeExpiryDate(value) {
+  void _onChangeExpiryDate(String? value) {
     if (value != null) {
       List<String> expireDate = CardUtils.getExpiryDate(value);
       _cardData.month = expireDate.first;

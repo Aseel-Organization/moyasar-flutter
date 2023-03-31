@@ -60,41 +60,67 @@ class _CreditCardState extends State<CreditCard> {
 
     setState(() => isSubmitting = false);
 
+    _handlePaymentResponse(result);
+  }
+
+  void _handlePaymentResponse(result) {
     if (result is! PaymentResponse ||
         result.status != PaymentStatus.initiated) {
       widget.onPaymentResult(result);
       return;
     }
-
-    final String transactionUrl =
-        (result.source as CardPaymentResponseSource).transactionUrl;
-
-    if (mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            fullscreenDialog: true,
-            maintainState: false,
-            builder: (context) => ThreeDSWebView(
-                transactionUrl: transactionUrl,
-                callbackUrl: widget.config.callbackUrl,
-                on3dsDone: (
-                  String status,
-                  String message,
-                ) async {
-                  if (status == PaymentStatus.paid.name) {
-                    result.status = PaymentStatus.paid;
-                  } else {
-                    result.status = PaymentStatus.failed;
-                    (result.source as CardPaymentResponseSource).message =
-                        message;
-                  }
-
-                  Navigator.pop(context);
-                  widget.onPaymentResult(result);
-                })),
-      );
+    if (result.source is CardPaymentResponseSource) {
+      final String transactionUrl =
+          (result.source as CardPaymentResponseSource).transactionUrl;
+      if (mounted) {
+        _openThreeDSecure(
+          result,
+          transactionUrl,
+        );
+      }
     }
+  }
+
+  void _openThreeDSecure(
+    PaymentResponse result,
+    String transactionUrl,
+  ) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        maintainState: false,
+        builder: (context) => ThreeDSWebView(
+          transactionUrl: transactionUrl,
+          callbackUrl: widget.config.callbackUrl,
+          on3dsDone: (
+            String status,
+            String message,
+          ) =>
+              _on3dsDone(
+            result,
+            status,
+            message,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _on3dsDone(
+    PaymentResponse result,
+    String status,
+    String message,
+  ) {
+    if (status == PaymentStatus.paid.name) {
+      result.status = PaymentStatus.paid;
+    } else {
+      result.status = PaymentStatus.failed;
+      (result.source as CardPaymentResponseSource).message = message;
+    }
+
+    Navigator.pop(context);
+    widget.onPaymentResult(result);
   }
 
   @override

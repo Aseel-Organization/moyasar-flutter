@@ -6,11 +6,12 @@ class ThreeDSWebView extends StatefulWidget {
   final String callbackUrl;
   final Function on3dsDone;
 
-  const ThreeDSWebView(
-      {super.key,
-      required this.transactionUrl,
-      required this.callbackUrl,
-      required this.on3dsDone});
+  const ThreeDSWebView({
+    super.key,
+    required this.transactionUrl,
+    required this.callbackUrl,
+    required this.on3dsDone,
+  });
 
   @override
   State<ThreeDSWebView> createState() => _ThreeDSWebViewState();

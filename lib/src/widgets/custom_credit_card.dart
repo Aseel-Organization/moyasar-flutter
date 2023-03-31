@@ -69,20 +69,29 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 hintText: widget.locale.nameOnCard,
               ),
               keyboardType: TextInputType.text,
-              validator: (String? input) =>
-                  CardUtils.validateName(input, widget.locale),
+              validator: (String? input) => CardUtils.validateName(
+                    input,
+                    widget.locale,
+                  ),
               onChanged: (value) {
                 _cardData.name = value ?? '';
-                widget.onCreditCardFormChange(_cardData, _isValidForm());
+                widget.onCreditCardFormChange(
+                  _cardData,
+                  _isValidForm(),
+                );
               },
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[a-zA-Z. ]')),
               ]),
           CardFormField(
               inputDecoration: buildInputDecoration(
-                  hintText: widget.locale.cardNumber, addNetworkIcons: true),
-              validator: (String? input) =>
-                  CardUtils.validateCardNum(input, widget.locale),
+                hintText: widget.locale.cardNumber,
+                addNetworkIcons: true,
+              ),
+              validator: (String? input) => CardUtils.validateCardNum(
+                    input,
+                    widget.locale,
+                  ),
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(16),
@@ -90,7 +99,10 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
               ],
               onChanged: (value) {
                 _cardData.number = CardUtils.getCleanedNumber(value!);
-                widget.onCreditCardFormChange(_cardData, _isValidForm());
+                widget.onCreditCardFormChange(
+                  _cardData,
+                  _isValidForm(),
+                );
               }),
           if (widget.horizontalExpiryAndCvv)
             Row(
@@ -106,15 +118,20 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                       LengthLimitingTextInputFormatter(4),
                       CardMonthInputFormatter(),
                     ],
-                    validator: (String? input) =>
-                        CardUtils.validateDate(input, widget.locale),
+                    validator: (String? input) => CardUtils.validateDate(
+                      input,
+                      widget.locale,
+                    ),
                     onChanged: (value) {
                       List<String> expireDate = CardUtils.getExpiryDate(value!);
                       if (expireDate.length == 2) {
                         _cardData.month = expireDate.first;
                         _cardData.year = expireDate[1];
                       }
-                      widget.onCreditCardFormChange(_cardData, _isValidForm());
+                      widget.onCreditCardFormChange(
+                        _cardData,
+                        _isValidForm(),
+                      );
                     },
                   ),
                 ),
@@ -130,12 +147,16 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(4),
                       ],
-                      validator: (String? input) =>
-                          CardUtils.validateCVC(input, widget.locale),
+                      validator: (String? input) => CardUtils.validateCVC(
+                            input,
+                            widget.locale,
+                          ),
                       onChanged: (value) {
                         _cardData.cvc = value ?? '';
                         widget.onCreditCardFormChange(
-                            _cardData, _isValidForm());
+                          _cardData,
+                          _isValidForm(),
+                        );
                       }),
                 ),
               ],
@@ -150,15 +171,20 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 LengthLimitingTextInputFormatter(4),
                 CardMonthInputFormatter(),
               ],
-              validator: (String? input) =>
-                  CardUtils.validateDate(input, widget.locale),
+              validator: (String? input) => CardUtils.validateDate(
+                input,
+                widget.locale,
+              ),
               onChanged: (value) {
                 List<String> expireDate = CardUtils.getExpiryDate(value!);
                 if (expireDate.length == 2) {
                   _cardData.month = expireDate.first;
                   _cardData.year = expireDate[1];
                 }
-                widget.onCreditCardFormChange(_cardData, _isValidForm());
+                widget.onCreditCardFormChange(
+                  _cardData,
+                  _isValidForm(),
+                );
               },
             ),
             CardFormField(
@@ -169,11 +195,16 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(4),
                 ],
-                validator: (String? input) =>
-                    CardUtils.validateCVC(input, widget.locale),
+                validator: (String? input) => CardUtils.validateCVC(
+                      input,
+                      widget.locale,
+                    ),
                 onChanged: (value) {
                   _cardData.cvc = value ?? '';
-                  widget.onCreditCardFormChange(_cardData, _isValidForm());
+                  widget.onCreditCardFormChange(
+                    _cardData,
+                    _isValidForm(),
+                  );
                 }),
           ],
         ],
@@ -185,24 +216,28 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
 InputDecoration buildInputDecoration(
     {required String hintText, bool addNetworkIcons = false}) {
   return InputDecoration(
-      suffixIcon: addNetworkIcons ? const NetworkIcons() : null,
-      hintText: hintText,
-      focusedErrorBorder: defaultErrorBorder,
-      enabledBorder: defaultEnabledBorder,
-      focusedBorder: defaultFocusedBorder,
-      errorBorder: defaultErrorBorder);
+    suffixIcon: addNetworkIcons ? const NetworkIcons() : null,
+    hintText: hintText,
+    focusedErrorBorder: defaultErrorBorder,
+    enabledBorder: defaultEnabledBorder,
+    focusedBorder: defaultFocusedBorder,
+    errorBorder: defaultErrorBorder,
+  );
 }
 
 BorderRadius defaultBorderRadius = const BorderRadius.all(Radius.circular(8));
 
 OutlineInputBorder defaultEnabledBorder = OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.grey[400]!),
-    borderRadius: defaultBorderRadius);
+  borderSide: BorderSide(color: Colors.grey[400]!),
+  borderRadius: defaultBorderRadius,
+);
 
 OutlineInputBorder defaultFocusedBorder = OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.grey[600]!),
-    borderRadius: defaultBorderRadius);
+  borderSide: BorderSide(color: Colors.grey[600]!),
+  borderRadius: defaultBorderRadius,
+);
 
 OutlineInputBorder defaultErrorBorder = OutlineInputBorder(
-    borderSide: const BorderSide(color: Colors.red),
-    borderRadius: defaultBorderRadius);
+  borderSide: const BorderSide(color: Colors.red),
+  borderRadius: defaultBorderRadius,
+);

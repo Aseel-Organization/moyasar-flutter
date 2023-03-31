@@ -131,28 +131,32 @@ class _CreditCardState extends State<CreditCard> {
       child: Column(
         children: [
           CardFormField(
-              inputDecoration: CreditFormTheme.buildInputDecoration(
-                hintText: widget.locale.nameOnCard,
+            inputDecoration: CreditFormTheme.buildInputDecoration(
+              hintText: widget.locale.nameOnCard,
+            ),
+            keyboardType: TextInputType.text,
+            validator: (String? input) =>
+                CardUtils.validateName(input, widget.locale),
+            onChanged: _onChangeName,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                RegExp('[a-zA-Z. ]'),
               ),
-              keyboardType: TextInputType.text,
-              validator: (String? input) =>
-                  CardUtils.validateName(input, widget.locale),
-              onChanged: (value) => _cardData.name = value ?? '',
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z. ]')),
-              ]),
+            ],
+          ),
           CardFormField(
             inputDecoration: CreditFormTheme.buildInputDecoration(
                 hintText: widget.locale.cardNumber, addNetworkIcons: true),
-            validator: (String? input) =>
-                CardUtils.validateCardNum(input, widget.locale),
+            validator: (String? input) => CardUtils.validateCardNum(
+              input,
+              widget.locale,
+            ),
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(16),
               CardNumberInputFormatter(),
             ],
-            onChanged: (value) =>
-                _cardData.number = CardUtils.getCleanedNumber(value!),
+            onChanged: _onChangeCardNumber,
           ),
           CardFormField(
             inputDecoration: CreditFormTheme.buildInputDecoration(
@@ -163,13 +167,11 @@ class _CreditCardState extends State<CreditCard> {
               LengthLimitingTextInputFormatter(4),
               CardMonthInputFormatter(),
             ],
-            validator: (String? input) =>
-                CardUtils.validateDate(input, widget.locale),
-            onChanged: (value) {
-              List<String> expireDate = CardUtils.getExpiryDate(value!);
-              _cardData.month = expireDate.first;
-              _cardData.year = expireDate[1];
-            },
+            validator: (String? input) => CardUtils.validateDate(
+              input,
+              widget.locale,
+            ),
+            onChanged: _onChangeExpiryDate,
           ),
           CardFormField(
             inputDecoration: CreditFormTheme.buildInputDecoration(
@@ -179,9 +181,11 @@ class _CreditCardState extends State<CreditCard> {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(4),
             ],
-            validator: (String? input) =>
-                CardUtils.validateCVC(input, widget.locale),
-            onChanged: (value) => _cardData.cvc = value ?? '',
+            validator: (String? input) => CardUtils.validateCVC(
+              input,
+              widget.locale,
+            ),
+            onChanged: _onChangeCvc,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -199,13 +203,36 @@ class _CreditCardState extends State<CreditCard> {
                         color: Colors.white,
                         strokeWidth: 2,
                       )
-                    : Text(_getShowAmount(widget.config.amount, widget.locale)),
+                    : Text(
+                        _getShowAmount(
+                          widget.config.amount,
+                          widget.locale,
+                        ),
+                      ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _onChangeCvc(value) => _cardData.cvc = value ?? '';
+
+  void _onChangeName(value) => _cardData.name = value ?? '';
+
+  void _onChangeCardNumber(value) {
+    if (value != null) {
+      _cardData.number = CardUtils.getCleanedNumber(value);
+    }
+  }
+
+  void _onChangeExpiryDate(value) {
+    if (value != null) {
+      List<String> expireDate = CardUtils.getExpiryDate(value);
+      _cardData.month = expireDate.first;
+      _cardData.year = expireDate[1];
+    }
   }
 
   String _getShowAmount(int amount, Localization locale) {

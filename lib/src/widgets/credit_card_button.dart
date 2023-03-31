@@ -8,18 +8,19 @@ import 'package:moyasar/src/models/sources/card/card_request_source.dart';
 
 /// The widget that shows the Credit Card form and manages the 3DS step.
 class CreditCardButton extends StatefulWidget {
-  const CreditCardButton(
-      {super.key,
-      this.onPressed,
-      required this.cardData,
-      required this.config,
-      required this.onPaymentResult,
-      this.buttonTitle,
-      this.buttonStyle,
-      this.showLoading = true,
-      this.locale = const Localization.en()});
+  const CreditCardButton({
+    super.key,
+    this.onPressed,
+    required this.cardData,
+    required this.config,
+    required this.onPaymentResult,
+    this.buttonTitle,
+    this.buttonStyle,
+    this.showLoading = true,
+    this.locale = const Localization.en(),
+  });
 
-  final Function(bool isLoading)? onPressed;
+  final void Function(bool isLoading)? onPressed;
   final Function onPaymentResult;
   final PaymentConfig config;
   final CardFormModel cardData;

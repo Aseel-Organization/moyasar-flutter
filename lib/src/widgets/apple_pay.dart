@@ -32,9 +32,11 @@ class _ApplePayState extends State<ApplePay> {
 
   Future<void> _setMerchantName() async {
     String merchantName = await ApplePayUtils.getMerchantName();
-    setState(() {
-      _merchantName = merchantName;
-    });
+    if (mounted) {
+      setState(() {
+        _merchantName = merchantName;
+      });
+    }
   }
 
   void _onApplePayError(error) {

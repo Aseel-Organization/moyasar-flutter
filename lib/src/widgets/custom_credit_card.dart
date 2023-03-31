@@ -70,7 +70,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
               keyboardType: TextInputType.text,
               validator: (String? input) =>
                   CardUtils.validateName(input, widget.locale),
-              onSaved: (value) {
+              onChanged: (value) {
                 _cardData.name = value ?? '';
                 widget.onCreditCardFormChange(_cardData, _isValidForm());
               },
@@ -87,7 +87,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 LengthLimitingTextInputFormatter(16),
                 CardNumberInputFormatter(),
               ],
-              onSaved: (value) {
+              onChanged: (value) {
                 _cardData.number = CardUtils.getCleanedNumber(value!);
                 widget.onCreditCardFormChange(_cardData, _isValidForm());
               }),
@@ -107,7 +107,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                     ],
                     validator: (String? input) =>
                         CardUtils.validateDate(input, widget.locale),
-                    onSaved: (value) {
+                    onChanged: (value) {
                       List<String> expireDate = CardUtils.getExpiryDate(value!);
                       if (expireDate.length == 2) {
                         _cardData.month = expireDate.first;
@@ -131,7 +131,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                       ],
                       validator: (String? input) =>
                           CardUtils.validateCVC(input, widget.locale),
-                      onSaved: (value) {
+                      onChanged: (value) {
                         _cardData.cvc = value ?? '';
                         widget.onCreditCardFormChange(
                             _cardData, _isValidForm());
@@ -151,7 +151,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
               ],
               validator: (String? input) =>
                   CardUtils.validateDate(input, widget.locale),
-              onSaved: (value) {
+              onChanged: (value) {
                 List<String> expireDate = CardUtils.getExpiryDate(value!);
                 if (expireDate.length == 2) {
                   _cardData.month = expireDate.first;
@@ -170,7 +170,7 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
                 ],
                 validator: (String? input) =>
                     CardUtils.validateCVC(input, widget.locale),
-                onSaved: (value) {
+                onChanged: (value) {
                   _cardData.cvc = value ?? '';
                   widget.onCreditCardFormChange(_cardData, _isValidForm());
                 }),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CardFormField extends StatelessWidget {
-  final void Function(String?)? onSaved;
+  final void Function(String?)? onChanged;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
@@ -11,7 +11,7 @@ class CardFormField extends StatelessWidget {
 
   const CardFormField({
     Key? key,
-    required this.onSaved,
+    required this.onChanged,
     this.validator,
     this.inputDecoration,
     this.keyboardType = TextInputType.number,
@@ -29,7 +29,7 @@ class CardFormField extends StatelessWidget {
           decoration: inputDecoration,
           validator: validator,
           onChanged: (value) {
-            onSaved?.call(value);
+            onChanged?.call(value);
           },
           inputFormatters: inputFormatters),
     );

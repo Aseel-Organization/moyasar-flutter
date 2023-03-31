@@ -108,7 +108,7 @@ class _CreditCardState extends State<CreditCard> {
               keyboardType: TextInputType.text,
               validator: (String? input) =>
                   CardUtils.validateName(input, widget.locale),
-              onSaved: (value) => _cardData.name = value ?? '',
+              onChanged: (value) => _cardData.name = value ?? '',
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[a-zA-Z. ]')),
               ]),
@@ -122,7 +122,7 @@ class _CreditCardState extends State<CreditCard> {
               LengthLimitingTextInputFormatter(16),
               CardNumberInputFormatter(),
             ],
-            onSaved: (value) =>
+            onChanged: (value) =>
                 _cardData.number = CardUtils.getCleanedNumber(value!),
           ),
           CardFormField(
@@ -136,7 +136,7 @@ class _CreditCardState extends State<CreditCard> {
             ],
             validator: (String? input) =>
                 CardUtils.validateDate(input, widget.locale),
-            onSaved: (value) {
+            onChanged: (value) {
               List<String> expireDate = CardUtils.getExpiryDate(value!);
               _cardData.month = expireDate.first;
               _cardData.year = expireDate[1];
@@ -152,7 +152,7 @@ class _CreditCardState extends State<CreditCard> {
             ],
             validator: (String? input) =>
                 CardUtils.validateCVC(input, widget.locale),
-            onSaved: (value) => _cardData.cvc = value ?? '',
+            onChanged: (value) => _cardData.cvc = value ?? '',
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),

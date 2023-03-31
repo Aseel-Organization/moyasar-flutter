@@ -208,33 +208,41 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
       _isValidForm(),
     );
   }
-}
 
-InputDecoration buildInputDecoration(
-    {required String hintText, bool addNetworkIcons = false}) {
-  return InputDecoration(
-    suffixIcon: addNetworkIcons ? const NetworkIcons() : null,
-    hintText: hintText,
-    focusedErrorBorder: defaultErrorBorder,
-    enabledBorder: defaultEnabledBorder,
-    focusedBorder: defaultFocusedBorder,
-    errorBorder: defaultErrorBorder,
+  InputDecoration buildInputDecoration({
+    required String hintText,
+    bool addNetworkIcons = false,
+  }) {
+    return InputDecoration(
+      suffixIcon: addNetworkIcons ? const NetworkIcons() : null,
+      hintText: hintText,
+      focusedErrorBorder: defaultErrorBorder,
+      enabledBorder: defaultEnabledBorder,
+      focusedBorder: defaultFocusedBorder,
+      errorBorder: defaultErrorBorder,
+    );
+  }
+
+  BorderRadius defaultBorderRadius = const BorderRadius.all(Radius.circular(8));
+
+  OutlineInputBorder defaultEnabledBorder = OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.grey[400]!),
+    borderRadius: const BorderRadius.all(
+      Radius.circular(8),
+    ),
+  );
+
+  OutlineInputBorder defaultFocusedBorder = OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.grey[600]!),
+    borderRadius: const BorderRadius.all(
+      Radius.circular(8),
+    ),
+  );
+
+  OutlineInputBorder defaultErrorBorder = const OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.red),
+    borderRadius: BorderRadius.all(
+      Radius.circular(8),
+    ),
   );
 }
-
-BorderRadius defaultBorderRadius = const BorderRadius.all(Radius.circular(8));
-
-OutlineInputBorder defaultEnabledBorder = OutlineInputBorder(
-  borderSide: BorderSide(color: Colors.grey[400]!),
-  borderRadius: defaultBorderRadius,
-);
-
-OutlineInputBorder defaultFocusedBorder = OutlineInputBorder(
-  borderSide: BorderSide(color: Colors.grey[600]!),
-  borderRadius: defaultBorderRadius,
-);
-
-OutlineInputBorder defaultErrorBorder = OutlineInputBorder(
-  borderSide: const BorderSide(color: Colors.red),
-  borderRadius: defaultBorderRadius,
-);

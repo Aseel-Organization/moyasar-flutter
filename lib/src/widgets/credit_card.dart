@@ -14,11 +14,12 @@ import 'package:moyasar/src/widgets/card_form_field.dart';
 
 /// The widget that shows the Credit Card form and manages the 3DS step.
 class CreditCard extends StatefulWidget {
-  const CreditCard(
-      {super.key,
-      required this.config,
-      required this.onPaymentResult,
-      this.locale = const Localization.en()});
+  const CreditCard({
+    super.key,
+    required this.config,
+    required this.onPaymentResult,
+    this.locale = const Localization.en(),
+  });
 
   final Function onPaymentResult;
   final PaymentConfig config;
@@ -49,21 +50,25 @@ class _CreditCardState extends State<CreditCard> {
 
     _formKey.currentState?.save();
 
-    final source = CardPaymentRequestSource(_cardData);
-    final paymentRequest = PaymentRequest(widget.config, source);
+    final CardPaymentRequestSource source = CardPaymentRequestSource(_cardData);
+    final PaymentRequest paymentRequest = PaymentRequest(
+      widget.config,
+      source,
+    );
 
     setState(() => isSubmitting = true);
 
     final result = await Moyasar.pay(
-        apiKey: widget.config.publishableApiKey,
-        paymentRequest: paymentRequest);
+      apiKey: widget.config.publishableApiKey,
+      paymentRequest: paymentRequest,
+    );
 
     setState(() => isSubmitting = false);
 
     _handlePaymentResponse(result);
   }
 
-  void _handlePaymentResponse(result) {
+  void _handlePaymentResponse(dynamic result) {
     if (result is! PaymentResponse ||
         result.status != PaymentStatus.initiated) {
       widget.onPaymentResult(result);
@@ -94,8 +99,8 @@ class _CreditCardState extends State<CreditCard> {
           transactionUrl: transactionUrl,
           callbackUrl: widget.config.callbackUrl,
           on3dsDone: (
-            String status,
-            String message,
+            String? status,
+            String? message,
           ) =>
               _on3dsDone(
             result,
@@ -109,8 +114,8 @@ class _CreditCardState extends State<CreditCard> {
 
   void _on3dsDone(
     PaymentResponse result,
-    String status,
-    String message,
+    String? status,
+    String? message,
   ) {
     if (status == PaymentStatus.paid.name) {
       result.status = PaymentStatus.paid;
@@ -236,7 +241,7 @@ class _CreditCardState extends State<CreditCard> {
   }
 
   String _getShowAmount(int amount, Localization locale) {
-    final formattedAmount = (amount / 100).toStringAsFixed(2);
+    final String formattedAmount = (amount / 100).toStringAsFixed(2);
 
     if (locale.languageCode == 'en') {
       return '${locale.pay} SAR $formattedAmount';

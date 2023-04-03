@@ -10,12 +10,14 @@ class ApplePay extends StatefulWidget {
     required this.onPaymentResult,
     this.onApplePayError,
     this.onPressed,
+    this.isProductionEnv = false,
   });
 
   final int amount;
   final void Function(String token) onPaymentResult;
   final void Function(Object? error)? onApplePayError;
   final VoidCallback? onPressed;
+  final bool isProductionEnv;
 
   @override
   State<ApplePay> createState() => _ApplePayState();
@@ -86,7 +88,9 @@ class _ApplePayState extends State<ApplePay> {
 
   Future<PaymentConfiguration> _getPaymentConfigurationFromAsset() {
     return PaymentConfiguration.fromAsset(
-      'default_payment_profile_apple_pay.json',
+      widget.isProductionEnv
+          ? 'default_payment_profile_apple_pay.json'
+          : 'default_payment_profile_apple_pay_dev.json',
     );
   }
 }

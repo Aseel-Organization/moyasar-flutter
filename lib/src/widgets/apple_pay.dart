@@ -8,11 +8,13 @@ class ApplePay extends StatefulWidget {
     super.key,
     required this.amount,
     required this.onPaymentResult,
+    this.onApplePayError,
     this.onPressed,
   });
 
   final int amount;
-  final Function onPaymentResult;
+  final void Function(String token) onPaymentResult;
+  final void Function(Object? error)? onApplePayError;
   final VoidCallback? onPressed;
 
   @override
@@ -40,12 +42,12 @@ class _ApplePayState extends State<ApplePay> {
   }
 
   void _onApplePayError(error) {
-    widget.onPaymentResult(error);
+    widget.onApplePayError?.call(error);
   }
 
-  Future<void> _onApplePayResult(paymentResult) async {
+  Future<void> _onApplePayResult(Map<String, dynamic> paymentResult) async {
     try {
-      final token = paymentResult['token'];
+      final String token = paymentResult['token'];
       widget.onPaymentResult(token);
     } catch (e) {
       _onApplePayError(e);
@@ -55,30 +57,31 @@ class _ApplePayState extends State<ApplePay> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<PaymentConfiguration>(
-        future: _paymentConfigurationFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ApplePayButton(
-              paymentConfiguration: snapshot.data,
-              paymentItems: [
-                PaymentItem(
-                  label: _merchantName,
-                  amount: (widget.amount / 100).toStringAsFixed(2),
-                ),
-              ],
-              type: ApplePayButtonType.inStore,
-              onPaymentResult: _onApplePayResult,
-              onPressed: widget.onPressed,
-              width: MediaQuery.of(context).size.width,
-              height: 40,
-              onError: _onApplePayError,
-              loadingIndicator: const Center(
-                child: CircularProgressIndicator(),
+      future: _paymentConfigurationFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ApplePayButton(
+            paymentConfiguration: snapshot.data,
+            paymentItems: [
+              PaymentItem(
+                label: _merchantName,
+                amount: (widget.amount / 100).toStringAsFixed(2),
               ),
-            );
-          }
-          return const SizedBox.shrink();
-        });
+            ],
+            type: ApplePayButtonType.inStore,
+            onPaymentResult: _onApplePayResult,
+            onPressed: widget.onPressed,
+            width: MediaQuery.of(context).size.width,
+            height: 40,
+            onError: _onApplePayError,
+            loadingIndicator: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
   }
 
   Future<PaymentConfiguration> _getPaymentConfigurationFromAsset() {

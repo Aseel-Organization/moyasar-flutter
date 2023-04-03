@@ -14,6 +14,7 @@ class CreditCardButton extends StatefulWidget {
     required this.cardData,
     required this.config,
     required this.onPaymentResult,
+    this.onPaymentError,
     this.buttonTitle,
     this.buttonStyle,
     this.showLoading = true,
@@ -21,7 +22,8 @@ class CreditCardButton extends StatefulWidget {
   });
 
   final void Function(bool isLoading)? onPressed;
-  final Function onPaymentResult;
+  final void Function(PaymentResponse paymentResponse) onPaymentResult;
+  final void Function(dynamic error)? onPaymentError;
   final PaymentConfig config;
   final CardFormModel cardData;
   final Localization locale;
@@ -37,8 +39,9 @@ class _CreditCardButtonState extends State<CreditCardButton> {
   bool _isSubmitting = false;
 
   void _pay() async {
-    final source = CardPaymentRequestSource(widget.cardData);
-    final paymentRequest = PaymentRequest(
+    final CardPaymentRequestSource source =
+        CardPaymentRequestSource(widget.cardData);
+    final PaymentRequest paymentRequest = PaymentRequest(
       widget.config,
       source,
     );
@@ -46,7 +49,7 @@ class _CreditCardButtonState extends State<CreditCardButton> {
     setState(() => _isSubmitting = true);
     widget.onPressed?.call(_isSubmitting);
 
-    final result = await Moyasar.pay(
+    final dynamic result = await Moyasar.pay(
       apiKey: widget.config.publishableApiKey,
       paymentRequest: paymentRequest,
     );
@@ -56,10 +59,10 @@ class _CreditCardButtonState extends State<CreditCardButton> {
     _handlePaymentResponse(result);
   }
 
-  void _handlePaymentResponse(result) {
+  void _handlePaymentResponse(dynamic result) {
     if (result is! PaymentResponse ||
         result.status != PaymentStatus.initiated) {
-      widget.onPaymentResult(result);
+      widget.onPaymentError?.call(result);
       return;
     }
     if (result.source is CardPaymentResponseSource) {
@@ -87,8 +90,8 @@ class _CreditCardButtonState extends State<CreditCardButton> {
           transactionUrl: transactionUrl,
           callbackUrl: widget.config.callbackUrl,
           on3dsDone: (
-            String status,
-            String message,
+            String? status,
+            String? message,
           ) =>
               _on3dsDone(
             result,
@@ -102,14 +105,16 @@ class _CreditCardButtonState extends State<CreditCardButton> {
 
   void _on3dsDone(
     PaymentResponse result,
-    String status,
-    String message,
+    String? status,
+    String? message,
   ) {
     if (status == PaymentStatus.paid.name) {
       result.status = PaymentStatus.paid;
     } else {
       result.status = PaymentStatus.failed;
-      (result.source as CardPaymentResponseSource).message = message;
+      if (result.source is CardPaymentResponseSource) {
+        (result.source as CardPaymentResponseSource).message = message;
+      }
     }
 
     Navigator.pop(context);
@@ -128,7 +133,7 @@ class _CreditCardButtonState extends State<CreditCardButton> {
             const SizedBox(
               width: 10,
             ),
-            const CircularProgressIndicator.adaptive()
+            const CircularProgressIndicator.adaptive(),
           ],
         ],
       ),

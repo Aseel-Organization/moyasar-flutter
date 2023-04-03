@@ -4,13 +4,19 @@ import 'package:webview_flutter/webview_flutter.dart';
 class ThreeDSWebView extends StatefulWidget {
   final String transactionUrl;
   final String callbackUrl;
-  final Function on3dsDone;
+  final void Function(String? status, String? message) on3dsDone;
+  final void Function(int progress)? onProgress;
+  final void Function(String url)? onPageStarted;
+  final void Function(WebResourceError error)? onWebResourceError;
 
   const ThreeDSWebView({
     super.key,
     required this.transactionUrl,
     required this.callbackUrl,
     required this.on3dsDone,
+    this.onProgress,
+    this.onPageStarted,
+    this.onWebResourceError,
   });
 
   @override
@@ -19,6 +25,7 @@ class ThreeDSWebView extends StatefulWidget {
 
 class _ThreeDSWebViewState extends State<ThreeDSWebView> {
   late final WebViewController _controller;
+
   @override
   void initState() {
     super.initState();
@@ -61,15 +68,14 @@ class _ThreeDSWebViewState extends State<ThreeDSWebView> {
   }
 
   void _onProgress(int progress) {
-    debugPrint('WebView is loading (progress : $progress%)');
+    widget.onProgress?.call(progress);
   }
 
   void _onPageStarted(String url) {
-    debugPrint('Page started loading: $url');
+    widget.onPageStarted?.call(url);
   }
 
   void _onPageFinished(String url) {
-    debugPrint('Page finished loading: $url');
     final redirectedTo = Uri.parse(url);
     final callbackUri = Uri.parse(widget.callbackUrl);
     final bool hasReachedFinalRedirection =
@@ -84,12 +90,6 @@ class _ThreeDSWebViewState extends State<ThreeDSWebView> {
   }
 
   void _onWebResourceError(WebResourceError error) {
-    debugPrint('''
-                Page resource error:
-                  code: ${error.errorCode}
-                  description: ${error.description}
-                  errorType: ${error.errorType}
-                  isForMainFrame: ${error.isForMainFrame}
-                  ''');
+    widget.onWebResourceError?.call(error);
   }
 }

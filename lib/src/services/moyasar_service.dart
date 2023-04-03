@@ -26,7 +26,7 @@ class MoyasarService {
     }
   }
 
-  static Future<PaymentStatus> applePay({
+  static Future<PaymentResponse> applePay({
     required PaymentConfig config,
     required String token,
   }) async {
@@ -41,9 +41,9 @@ class MoyasarService {
         apiKey: config.publishableApiKey,
         paymentRequest: paymentRequest,
       );
-      return result.status;
+      return result;
     } catch (e) {
-      return PaymentStatus.failed;
+      rethrow;
     }
   }
 

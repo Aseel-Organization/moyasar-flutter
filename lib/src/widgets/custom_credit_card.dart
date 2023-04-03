@@ -32,6 +32,27 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
 
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
 
+  final OutlineInputBorder _defaultEnabledBorder = OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.grey[400]!),
+    borderRadius: const BorderRadius.all(
+      Radius.circular(8),
+    ),
+  );
+
+  final OutlineInputBorder _defaultFocusedBorder = OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.grey[600]!),
+    borderRadius: const BorderRadius.all(
+      Radius.circular(8),
+    ),
+  );
+
+  final OutlineInputBorder _defaultErrorBorder = const OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.red),
+    borderRadius: BorderRadius.all(
+      Radius.circular(8),
+    ),
+  );
+
   bool _isValidForm() {
     if (widget.checkValidation || !_cardData.oneOrMoreIsEmpty()) {
       bool isValidForm =
@@ -214,25 +235,4 @@ class _CustomCreditCardState extends State<CustomCreditCard> {
       errorBorder: _defaultErrorBorder,
     );
   }
-
-  final OutlineInputBorder _defaultEnabledBorder = OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.grey[400]!),
-    borderRadius: const BorderRadius.all(
-      Radius.circular(8),
-    ),
-  );
-
-  final OutlineInputBorder _defaultFocusedBorder = OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.grey[600]!),
-    borderRadius: const BorderRadius.all(
-      Radius.circular(8),
-    ),
-  );
-
-  final OutlineInputBorder _defaultErrorBorder = const OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.red),
-    borderRadius: BorderRadius.all(
-      Radius.circular(8),
-    ),
-  );
 }

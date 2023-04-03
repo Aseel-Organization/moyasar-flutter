@@ -28,16 +28,16 @@ class CoffeeShop extends StatefulWidget {
 }
 
 class _CoffeeShopState extends State<CoffeeShop> {
-  final paymentConfig = PaymentConfig(
+  final _paymentConfig = PaymentConfig(
     publishableApiKey: 'pk_test_RV3Q4ZKLdA22ZNVkCR72WBDxb3oYnj9D14h6czGA',
     amount: 25758, // SAR 257.58
     description: 'Blue Coffee Beans',
     metadata: {'size': '2xl'},
   );
 
-  void onPaymentResult(result) {
+  void _onPaymentResult(dynamic result) {
     if (result is PaymentResponse) {
-      showToast(context, result.status.name);
+      _showToast(context, result.status.name);
       switch (result.status) {
         case PaymentStatus.paid:
           // handle success.
@@ -59,30 +59,34 @@ class _CoffeeShopState extends State<CoffeeShop> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: true,
-        body: Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: ListView(
-              children: [
-                const CoffeeImage(),
-                PaymentMethods(
-                  paymentConfig: paymentConfig,
-                  onPaymentResult: onPaymentResult,
-                ),
-              ],
-            ),
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
+      body: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: ListView(
+            children: [
+              const CoffeeImage(),
+              PaymentMethods(
+                paymentConfig: _paymentConfig,
+                onPaymentResult: _onPaymentResult,
+                onApplePayResult: _onPaymentResult,
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
-}
 
-void showToast(context, status) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text(
-      "Status: $status",
-      style: const TextStyle(fontSize: 20),
-    ),
-  ));
+  void _showToast(context, status) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Status: $status",
+          style: const TextStyle(fontSize: 20),
+        ),
+      ),
+    );
+  }
 }

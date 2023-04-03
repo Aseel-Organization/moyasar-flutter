@@ -3,10 +3,15 @@ import 'package:moyasar/moyasar.dart';
 
 class PaymentMethods extends StatefulWidget {
   final PaymentConfig paymentConfig;
-  final Function onPaymentResult;
+  final Function(String token) onApplePayResult;
+  final void Function(PaymentResponse paymentResponse) onPaymentResult;
 
-  const PaymentMethods(
-      {super.key, required this.paymentConfig, required this.onPaymentResult});
+  const PaymentMethods({
+    super.key,
+    required this.paymentConfig,
+    required this.onApplePayResult,
+    required this.onPaymentResult,
+  });
 
   @override
   State<PaymentMethods> createState() => _PaymentMethodsState();
@@ -24,7 +29,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: ApplePay(
-            onPaymentResult: widget.onPaymentResult,
+            onPaymentResult: widget.onApplePayResult,
             amount: 10,
           ),
         ),

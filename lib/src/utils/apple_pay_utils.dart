@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-const String paymentConfigFile =
-    "assets/default_payment_profile_apple_pay.json";
-
 class ApplePayUtils {
-  static Future<String> getMerchantName() async {
-    final String config = await rootBundle.loadString(paymentConfigFile);
+  static Future<String> getMerchantName(String paymentConfigFile) async {
+    final String config =
+        await rootBundle.loadString('assets/$paymentConfigFile');
     return await json.decode(config)["data"]["displayName"];
   }
 }

@@ -29,6 +29,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: ApplePay(
+            paymentProfilePath: 'assets/default_payment_profile_apple_pay.json',
             onPaymentResult: widget.onApplePayResult,
             amount: 10,
           ),

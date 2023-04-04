@@ -3,7 +3,7 @@ import 'package:moyasar/moyasar.dart';
 
 class PaymentMethods extends StatefulWidget {
   final PaymentConfig paymentConfig;
-  final Function(String token) onApplePayResult;
+  final void Function(String token) onApplePayResult;
   final void Function(PaymentResponse paymentResponse) onPaymentResult;
 
   const PaymentMethods({

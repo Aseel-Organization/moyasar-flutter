@@ -28,7 +28,7 @@ class CoffeeShop extends StatefulWidget {
 }
 
 class _CoffeeShopState extends State<CoffeeShop> {
-  final _paymentConfig = PaymentConfig(
+  final PaymentConfig _paymentConfig = PaymentConfig(
     publishableApiKey: 'pk_test_RV3Q4ZKLdA22ZNVkCR72WBDxb3oYnj9D14h6czGA',
     amount: 25758, // SAR 257.58
     description: 'Blue Coffee Beans',

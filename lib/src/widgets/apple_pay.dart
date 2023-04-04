@@ -43,7 +43,7 @@ class _ApplePayState extends State<ApplePay> {
     }
   }
 
-  void _onApplePayError(error) {
+  void _onApplePayError(Object? error) {
     widget.onApplePayError?.call(error);
   }
 

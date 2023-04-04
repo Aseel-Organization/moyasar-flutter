@@ -35,25 +35,33 @@ class _CoffeeShopState extends State<CoffeeShop> {
     metadata: {'size': '2xl'},
   );
 
-  void _onPaymentResult(dynamic result) {
-    if (result is PaymentResponse) {
-      _showToast(context, result.status.name);
-      switch (result.status) {
-        case PaymentStatus.paid:
-          // handle success.
-          break;
-        case PaymentStatus.failed:
-          // handle failure.
-          break;
-        default:
-      }
-      return;
+  void _onPaymentResult(PaymentResponse result) {
+    _showToast(context, result.status.name);
+    switch (result.status) {
+      case PaymentStatus.paid:
+        // handle success.
+        break;
+      case PaymentStatus.failed:
+        // handle failure.
+        break;
+      default:
     }
+    return;
+  }
 
-    // handle other type of failures.
-    if (result is AuthError) {}
-    if (result is ValidationError) {}
-    if (result is PaymentCanceledError) {}
+  Future<void> _onApplePayResult(String token) async {
+    final PaymentResponse result =
+        await MoyasarService.applePay(config: _paymentConfig, token: token);
+    switch (result.status) {
+      case PaymentStatus.paid:
+        // handle success.
+        break;
+      case PaymentStatus.failed:
+        // handle failure.
+        break;
+      default:
+    }
+    return;
   }
 
   @override
@@ -70,7 +78,7 @@ class _CoffeeShopState extends State<CoffeeShop> {
               PaymentMethods(
                 paymentConfig: _paymentConfig,
                 onPaymentResult: _onPaymentResult,
-                onApplePayResult: _onPaymentResult,
+                onApplePayResult: _onApplePayResult,
               ),
             ],
           ),
@@ -79,7 +87,7 @@ class _CoffeeShopState extends State<CoffeeShop> {
     );
   }
 
-  void _showToast(context, status) {
+  void _showToast(BuildContext context, String status) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(

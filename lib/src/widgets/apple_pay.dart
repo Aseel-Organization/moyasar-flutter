@@ -28,7 +28,7 @@ class _ApplePayState extends State<ApplePay> {
   String _merchantName = "";
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     _paymentConfigurationFuture = _getPaymentConfigurationFromAsset();
     _setMerchantName();

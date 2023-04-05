@@ -58,7 +58,7 @@ class _CreditCardState extends State<CreditCard> {
 
     setState(() => isSubmitting = true);
 
-    final result = await Moyasar.pay(
+    final dynamic result = await Moyasar.pay(
       apiKey: widget.config.publishableApiKey,
       paymentRequest: paymentRequest,
     );

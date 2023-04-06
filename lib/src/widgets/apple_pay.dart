@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:moyasar/src/models/apple_pay_configuration.dart';
 import 'package:pay/pay.dart';
 
 /// The widget that shows the Apple Pay button.
@@ -9,14 +7,16 @@ class ApplePay extends StatefulWidget {
     super.key,
     required this.amount,
     required this.onPaymentResult,
-    required this.applePayConfiguration,
+    required this.paymentConfiguration,
+    required this.displayName,
     this.onApplePayError,
     this.onPressed,
   });
 
   final int amount;
   final void Function(String token) onPaymentResult;
-  final ApplePayConfiguration applePayConfiguration;
+  final PaymentConfiguration paymentConfiguration;
+  final String displayName;
   final void Function(Object? error)? onApplePayError;
   final VoidCallback? onPressed;
 
@@ -41,12 +41,10 @@ class _ApplePayState extends State<ApplePay> {
   @override
   Widget build(BuildContext context) {
     return ApplePayButton(
-      paymentConfiguration: PaymentConfiguration.fromJsonString(
-        jsonEncode(widget.applePayConfiguration),
-      ),
+      paymentConfiguration: widget.paymentConfiguration,
       paymentItems: [
         PaymentItem(
-          label: widget.applePayConfiguration.displayName,
+          label: widget.displayName,
           amount: (widget.amount / 100).toStringAsFixed(2),
         ),
       ],

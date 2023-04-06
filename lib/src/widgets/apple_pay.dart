@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:moyasar/src/utils/apple_pay_utils.dart';
+import 'package:moyasar/src/models/apple_pay_configuration.dart';
 import 'package:pay/pay.dart';
 
 /// The widget that shows the Apple Pay button.
@@ -8,14 +9,14 @@ class ApplePay extends StatefulWidget {
     super.key,
     required this.amount,
     required this.onPaymentResult,
-    required this.paymentProfilePath,
+    required this.applePayConfiguration,
     this.onApplePayError,
     this.onPressed,
   });
 
   final int amount;
   final void Function(String token) onPaymentResult;
-  final String paymentProfilePath;
+  final ApplePayConfiguration applePayConfiguration;
   final void Function(Object? error)? onApplePayError;
   final VoidCallback? onPressed;
 
@@ -24,26 +25,6 @@ class ApplePay extends StatefulWidget {
 }
 
 class _ApplePayState extends State<ApplePay> {
-  late Future<PaymentConfiguration> _paymentConfigurationFuture;
-  String _merchantName = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _paymentConfigurationFuture = _getPaymentConfigurationFromAsset();
-    _setMerchantName();
-  }
-
-  Future<void> _setMerchantName() async {
-    String merchantName =
-        await ApplePayUtils.getMerchantName(widget.paymentProfilePath);
-    if (mounted) {
-      setState(() {
-        _merchantName = merchantName;
-      });
-    }
-  }
-
   void _onApplePayError(Object? error) {
     widget.onApplePayError?.call(error);
   }
@@ -59,35 +40,25 @@ class _ApplePayState extends State<ApplePay> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<PaymentConfiguration>(
-      future: _paymentConfigurationFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ApplePayButton(
-            paymentConfiguration: snapshot.data,
-            paymentItems: [
-              PaymentItem(
-                label: _merchantName,
-                amount: (widget.amount / 100).toStringAsFixed(2),
-              ),
-            ],
-            type: ApplePayButtonType.inStore,
-            onPaymentResult: _onApplePayResult,
-            onPressed: widget.onPressed,
-            width: MediaQuery.of(context).size.width,
-            height: 40,
-            onError: _onApplePayError,
-            loadingIndicator: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
+    return ApplePayButton(
+      paymentConfiguration: PaymentConfiguration.fromJsonString(
+        jsonEncode(widget.applePayConfiguration),
+      ),
+      paymentItems: [
+        PaymentItem(
+          label: widget.applePayConfiguration.displayName,
+          amount: (widget.amount / 100).toStringAsFixed(2),
+        ),
+      ],
+      type: ApplePayButtonType.inStore,
+      onPaymentResult: _onApplePayResult,
+      onPressed: widget.onPressed,
+      width: MediaQuery.of(context).size.width,
+      height: 40,
+      onError: _onApplePayError,
+      loadingIndicator: const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
-  }
-
-  Future<PaymentConfiguration> _getPaymentConfigurationFromAsset() {
-    return PaymentConfiguration.fromAsset(widget.paymentProfilePath);
   }
 }

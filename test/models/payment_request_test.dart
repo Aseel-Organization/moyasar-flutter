@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moyasar/moyasar.dart';
-import 'package:moyasar/src/models/card_form_model.dart';
 import 'package:moyasar/src/models/payment_request.dart';
 import 'package:moyasar/src/models/payment_type.dart';
 import 'package:moyasar/src/models/sources/apple_pay/apple_pay_request_source.dart';

@@ -5,7 +5,8 @@ class CardUtils {
   static String? validateName(String? value, Localization locale) {
     if (value == null || value.isEmpty) return locale.nameRequired;
 
-    var fullName = value.split(RegExp(r' ')).where((el) => el != '');
+    List<String> fullName =
+        value.split(RegExp(r' ')).where((el) => el != '').toList();
     if (fullName.length < 2) {
       return locale.bothNamesRequired;
     }
@@ -30,15 +31,15 @@ class CardUtils {
 
     if (!value.contains(RegExp(r'(/)'))) return locale.invalidExpiry;
 
-    var split = value.split(RegExp(r'(/)'));
+    List<String> split = value.split(RegExp(r'(/)'));
 
     int month = int.parse(split[0]);
     int year = int.parse(split[1]);
 
     if ((month < 1) || (month > 12)) return locale.invalidExpiry;
 
-    final expiryDate = DateTime(convertYearTo4Digits(year), month);
-    final now = DateTime.now();
+    final DateTime expiryDate = DateTime(convertYearTo4Digits(year), month);
+    final DateTime now = DateTime.now();
 
     if (expiryDate.isBefore(now)) return locale.expiredCard;
 
@@ -55,7 +56,7 @@ class CardUtils {
 
   static int convertYearTo4Digits(int year) {
     if (year < 100 && year >= 0) {
-      var now = DateTime.now();
+      final DateTime now = DateTime.now();
       String currentYear = now.year.toString();
       String prefix = currentYear.substring(0, currentYear.length - 2);
       year = int.parse('$prefix${year.toString().padLeft(2, '0')}');
@@ -64,8 +65,15 @@ class CardUtils {
   }
 
   static List<String> getExpiryDate(String value) {
-    var split = value.split(RegExp(r'(/)'));
-    return [split[0].trim(), split[1].trim()];
+    try {
+      List<String> split = value.split(RegExp(r'(/)'));
+      return [
+        split[0].trim(),
+        split[1].trim(),
+      ];
+    } catch (e) {
+      return [];
+    }
   }
 
   static String getCleanedNumber(String text) {
@@ -89,7 +97,7 @@ class CardUtils {
 bool isValidLuhn(String cardNumber) {
   int sum = 0;
   int length = cardNumber.length;
-  for (var i = 0; i < length; i++) {
+  for (int i = 0; i < length; i++) {
     int digit = int.parse(cardNumber[length - i - 1]);
 
     if (i % 2 == 1) {

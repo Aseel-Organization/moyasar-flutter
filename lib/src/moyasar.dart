@@ -10,13 +10,18 @@ const version = "1.0.1";
 class Moyasar {
   static const String apiUrl = 'https://api.moyasar.com/v1/payments';
 
-  static Future<dynamic> pay(
-      {required String apiKey, required PaymentRequest paymentRequest}) async {
+  static Future<dynamic> pay({
+    required String apiKey,
+    required PaymentRequest paymentRequest,
+  }) async {
     final headers = buildRequestHeaders(apiKey);
     final body = jsonEncode(paymentRequest.toJson());
 
-    final res =
-        await http.post(Uri.parse(apiUrl), headers: headers, body: body);
+    final res = await http.post(
+      Uri.parse(apiUrl),
+      headers: headers,
+      body: body,
+    );
 
     dynamic jsonBody = jsonDecode(res.body);
 
@@ -31,12 +36,18 @@ class Moyasar {
         if (jsonBody['errors'] is String) {
           return ValidationError.messageOnly(jsonBody['errors']);
         } else {
-          return ValidationError(jsonBody['message'], jsonBody['errors']);
+          return ValidationError(
+            jsonBody['message'],
+            jsonBody['errors'],
+          );
         }
       }
     }
 
-    return PaymentResponse.fromJson(jsonBody, paymentRequest.source.type);
+    return PaymentResponse.fromJson(
+      jsonBody,
+      paymentRequest.source.type,
+    );
   }
 }
 

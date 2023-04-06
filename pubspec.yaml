@@ -1,6 +1,6 @@
 name: moyasar
 description: The Official Moyasar Flutter SDK.
-version: 1.0.1
+version: 1.0.2
 homepage: https://moyasar.com/en/
 repository: https://github.com/moyasar/moyasar-flutter
 issue_tracker: https://github.com/moyasar/moyasar-flutter/issues
@@ -13,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.5
-  pay: ^1.0.11
-  webview_flutter: ^3.0.4
+  pay: ^1.1.0
+  webview_flutter: ^4.0.6
 
 dev_dependencies:
   flutter_test:

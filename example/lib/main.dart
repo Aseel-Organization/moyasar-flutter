@@ -28,61 +28,73 @@ class CoffeeShop extends StatefulWidget {
 }
 
 class _CoffeeShopState extends State<CoffeeShop> {
-  final paymentConfig = PaymentConfig(
+  final PaymentConfig _paymentConfig = PaymentConfig(
     publishableApiKey: 'pk_test_RV3Q4ZKLdA22ZNVkCR72WBDxb3oYnj9D14h6czGA',
     amount: 25758, // SAR 257.58
     description: 'Blue Coffee Beans',
     metadata: {'size': '2xl'},
   );
 
-  void onPaymentResult(result) {
-    if (result is PaymentResponse) {
-      showToast(context, result.status.name);
-      switch (result.status) {
-        case PaymentStatus.paid:
-          // handle success.
-          break;
-        case PaymentStatus.failed:
-          // handle failure.
-          break;
-        default:
-      }
-      return;
+  void _onPaymentResult(PaymentResponse result) {
+    _showToast(context, result.status.name);
+    switch (result.status) {
+      case PaymentStatus.paid:
+        // handle success.
+        break;
+      case PaymentStatus.failed:
+        // handle failure.
+        break;
+      default:
     }
+    return;
+  }
 
-    // handle other type of failures.
-    if (result is AuthError) {}
-    if (result is ValidationError) {}
-    if (result is PaymentCanceledError) {}
+  Future<void> _onApplePayResult(String token) async {
+    final PaymentResponse result =
+        await MoyasarService.applePay(config: _paymentConfig, token: token);
+    switch (result.status) {
+      case PaymentStatus.paid:
+        // handle success.
+        break;
+      case PaymentStatus.failed:
+        // handle failure.
+        break;
+      default:
+    }
+    return;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: true,
-        body: Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: ListView(
-              children: [
-                const CoffeeImage(),
-                PaymentMethods(
-                  paymentConfig: paymentConfig,
-                  onPaymentResult: onPaymentResult,
-                ),
-              ],
-            ),
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
+      body: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: ListView(
+            children: [
+              const CoffeeImage(),
+              PaymentMethods(
+                paymentConfig: _paymentConfig,
+                onPaymentResult: _onPaymentResult,
+                onApplePayResult: _onApplePayResult,
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
-}
 
-void showToast(context, status) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text(
-      "Status: $status",
-      style: const TextStyle(fontSize: 20),
-    ),
-  ));
+  void _showToast(BuildContext context, String status) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Status: $status",
+          style: const TextStyle(fontSize: 20),
+        ),
+      ),
+    );
+  }
 }

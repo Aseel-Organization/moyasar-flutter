@@ -16,6 +16,8 @@ export 'src/models/sources/card/card_response_source.dart'
     show CardPaymentResponseSource;
 export 'src/models/sources/apple_pay/apple_pay_response_source.dart'
     show ApplePayPaymentResponseSource;
+export 'src/models/apple_pay_configuration.dart'
+    show ApplePayConfiguration, SupportedNetworks, MerchantCapabilities;
 
 export 'src/locales/localizaton.dart' show Localization;
 

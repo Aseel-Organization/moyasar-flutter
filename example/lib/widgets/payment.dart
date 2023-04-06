@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:coffee_flutter/models/apple_pay_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:moyasar/moyasar.dart';
 
@@ -29,9 +32,14 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: ApplePay(
-            applePayConfiguration: const ApplePayConfiguration(
-              merchantIdentifier: 'merchant.mysr.fghurayri',
-              displayName: 'Aseel',
+            displayName: 'Coffee',
+            paymentConfiguration: PaymentConfiguration.fromJsonString(
+              jsonEncode(
+                const ApplePayConfiguration(
+                  merchantIdentifier: 'merchant.mysr.fghurayri',
+                  displayName: 'Aseel',
+                ),
+              ),
             ),
             onPaymentResult: widget.onApplePayResult,
             amount: 10,

@@ -6,15 +6,15 @@ repository: https://github.com/moyasar/moyasar-flutter
 issue_tracker: https://github.com/moyasar/moyasar-flutter/issues
 
 environment:
-  sdk: ">=2.18.2 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.18.5 <=4.0.0"
+  flutter: ">=3.16.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.1.2
-  pay: ^1.1.0
-  webview_flutter: ^4.0.6
+  http: ^1.2.0
+  pay: ^1.1.2
+  webview_flutter: ^4.5.0
 
 dev_dependencies:
   flutter_test:
